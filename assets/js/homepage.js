@@ -16,6 +16,16 @@ var formSubmitHandler = function(event) {
     }
 };
 
+var buttonClickHandler = function(event) {
+    var language = event.target.getAttribute("data-language");
+    
+    if(language) {
+        getFeatureRepos(language);
+
+        repoContainerEl.textContent = "";
+    }
+};
+
 var displayRepos = function(repos, searchTerm) {
     // check if api returned any repos
     if (repos.length === 0) {
@@ -64,11 +74,9 @@ var displayRepos = function(repos, searchTerm) {
     }
 };
 
-userFormEl.addEventListener("submit", formSubmitHandler);
-
 var getUserRepos = function(user) {
     // format the github api url
-    var apiUrl = "https://api.github.com/users/Mike2803/repos";
+    var apiUrl = "https://api.github.com/users/"+ user +"/repos";
   
     // make a request to the url
     fetch(apiUrl).then(function(response) {
@@ -85,3 +93,21 @@ var getUserRepos = function(user) {
         alert("Unable to connect to GitHub");
     });
 };
+
+var getFeatureRepos = function(language) {
+    var apiUrl = "https://api.github.com/search/repositories?q=" + language + "+is:featured&sort=help-wanted-issues";
+
+    fetch(apiUrl).then(function(response) {
+        if (response.ok) {
+          response.json().then(function(data) {
+            displayRepos(data.items, language);
+          });
+        } else {
+          alert('Error: GitHub User Not Found');
+        }
+    });
+};
+
+languageButtonsEl.addEventListener("click", buttonClickHandler);
+
+userFormEl.addEventListener("submit", formSubmitHandler);

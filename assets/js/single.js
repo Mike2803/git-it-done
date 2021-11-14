@@ -3,7 +3,7 @@ var limitWarningEl = document.querySelector("#limit-warning");
 var repoNameEl = document.querySelector("#repo-name");
 
 var getRepoIssues = function(repo) {
-    var apiUrl = "https://api.github.com/repos/<repo>/issues?direction=asc";
+    var apiUrl = "https://api.github.com/repos/" + repo + "/issues?direction=asc";
 
     // make a get request to url
     fetch(apiUrl).then(function(response) {
